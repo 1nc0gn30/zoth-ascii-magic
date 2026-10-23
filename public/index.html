@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoth ASCII Magic Studio | Image, 3D & Sobel Edge ASCII/Braille Synthesizer</title>
+  <meta name="description" content="100% client-side Image-to-ASCII, Sub-Pixel Unicode Braille, Sobel directional edge detection, interactive 2D point relighting, and 24-bit TrueColor ANSI/HTML exporter.">
+  <meta name="keywords" content="ascii magic, image to ascii, braille art generator, ansi art generator, sobel edge ascii, terminal art, zoth studio, nullai">
+  <meta name="author" content="Neal Frazier Tech">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Zoth ASCII Magic Studio | Image, 3D & Sobel Edge ASCII/Braille Synthesizer">
+  <meta property="og:description" content="Convert images, portraits, and 3D SDF geometry into relightable ASCII, Unicode Braille, and 24-bit TrueColor ANSI art with Sobel directional edge detection 100% in-browser.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zoth-ascii-magic.netlify.app/">
+  <meta property="og:image" content="https://zoth-ascii-magic.netlify.app/assets/banner.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Zoth ASCII Magic Studio - Relightable Image and 3D to ASCII/Braille Synthesizer">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@1nc0gn30">
+  <meta name="twitter:creator" content="@1nc0gn30">
+  <meta name="twitter:title" content="Zoth ASCII Magic Studio | Image, 3D & Sobel Edge ASCII/Braille Synthesizer">
+  <meta name="twitter:description" content="100% client-side Image & 3D to ASCII/Braille/ANSI synthesizer with Sobel directional edges and interactive point relighting.">
+  <meta name="twitter:image" content="https://zoth-ascii-magic.netlify.app/assets/banner.png">
+
+  <!-- Schema.org JSON-LD Graph -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebApplication",
+        "name": "Zoth ASCII Magic Studio",
+        "url": "https://zoth-ascii-magic.netlify.app/",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "All modern browsers (Chrome, Edge, Firefox, Safari) & ZothOS Linux CLI",
+        "description": "100% client-side Image-to-ASCII, Sub-Pixel Unicode Braille, Sobel directional edge detection, interactive 2D point relighting, and 24-bit TrueColor ANSI/HTML exporter.",
+        "offers": {
+          "@type": "Offer",
+          "price": "19.00",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock"
+        },
+        "creator": {
+          "@type": "Person",
+          "name": "Neal Frazier",
+          "url": "https://nealfrazier.tech"
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does Zoth ASCII Magic Studio upload my images to a cloud server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Zoth ASCII Magic Studio processes 100% of your uploaded images, Sobel edge convolutions, and 2D lighting calculations locally in browser memory via HTML5 Canvas. Zero bytes ever leave your device."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How does Sobel directional edge emphasis work in ASCII Magic?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The engine computes horizontal (Gx) and vertical (Gy) Sobel luminance gradients across every cell and automatically maps high-gradient structural contours to directional glyphs (/, \\, |, -) while shading interior surfaces with density ramps."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What export formats and payment options are supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can export 24-bit TrueColor ANSI (.ans) terminal streams, self-contained HTML/CSS <pre> blocks, raw ASCII text matrices, and high-res PNG renders. Pro Lifetime access ($19) supports Stripe (Card, Apple Pay, Google Pay) and Solana via DePay."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://integrate.depay.com/widgets/v13.js" defer></script>
+
+  <style>
+    :root {
+      --bg: #07080D;
+      --bg-surface: #0D0F18;
+      --bg-card: #121522;
+      --border: rgba(212, 175, 55, 0.28);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --text: #F4F6FB;
+      --text-muted: #94A3B8;
+      --gold: #D4AF37;
+      --gold-soft: #F5E6AB;
+      --cyan: #38BDF8;
+      --green: #10B981;
+      --purple: #C084FC;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Space Grotesk', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+      width: 100% !important;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* High-Converting Sales Funnel Banner */
+    .sales-banner {
+      background: linear-gradient(90deg, rgba(212,175,55,0.16) 0%, rgba(56,189,248,0.14) 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 18px;
+      font-size: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .sales-banner-left {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge-urgent {
+      background: rgba(212, 175, 55, 0.22);
+      color: var(--gold-soft);
+      border: 1px solid var(--gold);
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .price-strike {
+      text-decoration: line-through;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+
+    .sales-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 44px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text);
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      border-color: var(--gold);
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: #060609;
+      border-color: var(--gold);
+    }
+
+    .btn-gold:hover {
+      background: var(--gold-soft);
+    }
+
+    .btn-solana {
+      background: rgba(192, 132, 252, 0.16);
+      color: #E9D5FF;
+      border-color: rgba(192, 132, 252, 0.45);
+    }
+
+    .btn-cyan {
+      background: rgba(56, 189, 248, 0.14);
+      color: var(--cyan);
+      border-color: rgba(56, 189, 248, 0.45);
+    }
+
+    /* Header */
+    header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(13, 15, 24, 0.9);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--gold);
+      background: rgba(212, 175, 55, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .status-pill {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34D399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .hero-bar {
+      margin-bottom: 20px;
+      padding: 18px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(18, 21, 34, 0.95), rgba(10, 12, 20, 0.95));
+      border: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .hero-bar h1 {
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 2.5vw, 1.85rem);
+      margin-bottom: 6px;
+    }
+
+    .hero-bar p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      max-width: 760px;
+    }
+
+    /* Workspace Grid */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--gold-soft);
+    }
+
+    .canvas-stage {
+      width: 100%;
+      height: 440px;
+      background: #040508;
+      position: relative;
+      cursor: crosshair;
+    }
+
+    @media (max-width: 600px) {
+      .canvas-stage {
+        height: 320px;
+      }
+    }
+
+    #asciiCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .preset-strip {
+      padding: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      border-top: 1px solid var(--border-subtle);
+      background: #090B12;
+    }
+
+    .preset-btn {
+      min-height: 44px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(255,255,255,0.03);
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      cursor: pointer;
+    }
+
+    .preset-btn.active {
+      background: var(--gold);
+      color: #050508;
+      border-color: var(--gold);
+    }
+
+    /* Controls Sidebar */
+    .controls-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .control-group label {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .control-group input[type="range"] {
+      width: 100%;
+      accent-color: var(--gold);
+      min-height: 28px;
+    }
+
+    .ramp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    /* Frosted Glass Paywall Output Box */
+    .paywall-wrapper {
+      margin-top: 20px;
+      position: relative;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #06070C;
+      overflow: hidden;
+    }
+
+    .paywall-blur-target {
+      padding: 18px;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      line-height: 1.25;
+      color: var(--gold-soft);
+      max-height: 260px;
+      overflow: hidden;
+      filter: blur(6px);
+      user-select: none;
+      transition: filter 0.25s ease;
+      white-space: pre;
+    }
+
+    .paywall-blur-target.unlocked {
+      filter: none;
+      user-select: text;
+      overflow: auto;
+    }
+
+    .paywall-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(7, 8, 13, 0.68);
+      backdrop-filter: blur(4px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      gap: 10px;
+    }
+
+    .paywall-overlay.hidden {
+      display: none;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--gold);
+      border-radius: 16px;
+      max-width: 520px;
+      width: 100%;
+      padding: 24px;
+    }
+
+    .key-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #05060A;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      margin-top: 8px;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--gold-soft);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- High-Converting Founding Member Sales Funnel Banner -->
+  <div class="sales-banner" role="region" aria-label="Founding Member Lifetime Offer">
+    <div class="sales-banner-left">
+      <span class="badge-urgent">⚡ FOUNDING MEMBER LIFETIME</span>
+      <span>
+        Unlock <strong>24-Bit TrueColor ANSI, Standalone HTML/JS Shader &amp; SVG/PNG Exports</strong> —
+        <span class="price-strike">$79</span> <strong>$19 One-Time</strong>
+      </span>
+    </div>
+    <div class="sales-actions">
+      <a class="btn btn-gold" href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L" target="_blank" rel="noopener">
+        💳 Unlock via Stripe ($19)
+      </a>
+      <button class="btn btn-solana" type="button" onclick="triggerSolanaCheckout()">
+        ◎ Pay with Solana
+      </button>
+      <button class="btn" type="button" onclick="openLicenseModal()">
+        🔑 Activate Key
+      </button>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-group">
+      <div class="brand-logo" aria-hidden="true">A✦</div>
+      <div>
+        <div class="brand-title">Zoth ASCII Magic Studio</div>
+        <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
+          v2.6.0 • Client-Side Image/3D to ASCII, Braille &amp; Sobel Edge Engine
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <span id="licenseBadge" class="status-pill">LOCAL ENCLAVE READY</span>
+      <a class="btn" href="https://zoth.nullai.tech/tools/zoth-ascii-magic" target="_blank" rel="noopener">
+        Zoth Studio Hub ↗
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-bar">
+      <div>
+        <h1>Relightable Image, 3D SDF &amp; Sobel Edge ASCII Synthesizer</h1>
+        <p>
+          Drop any image or sculpt 60fps mathematical 3D surfaces into 70-character ASCII, 2×4 Sub-Pixel Unicode Braille, and 24-bit TrueColor ANSI. Drag directly across the stage to reposition the 2D point light source in real time.
+        </p>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <input id="imageUploadInput" type="file" accept="image/*" style="display:none" onchange="handleImageFile(event)">
+        <button class="btn btn-cyan" type="button" onclick="document.getElementById('imageUploadInput').click()">
+          📁 Upload Image → ASCII
+        </button>
+        <button class="btn btn-gold" type="button" onclick="interceptExport('ansi')">
+          ⬇ Export 24-Bit ANSI (.ans)
+        </button>
+      </div>
+    </section>
+
+    <div class="workspace-grid">
+      <!-- Left: Interactive 60FPS Stage -->
+      <div class="panel">
+        <div class="panel-header">
+          <span id="hudStatus">STAGE // CYBER BUST SDF // DRAG TO RELIGHT</span>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn" type="button" style="min-height:36px; padding:4px 10px;" onclick="togglePlay()" id="playBtn">
+              ⏸ Pause
+            </button>
+            <button class="btn" type="button" style="min-height:36px; padding:4px 10px;" onclick="interceptExport('copy')">
+              📋 Copy ASCII
+            </button>
+            <button class="btn" type="button" style="min-height:36px; padding:4px 10px;" onclick="interceptExport('png')">
+              🖼 Save PNG
+            </button>
+          </div>
+        </div>
+
+        <div class="canvas-stage" id="canvasContainer">
+          <canvas id="asciiCanvas" aria-label="Interactive ASCII Magic 60fps Rendering Stage"></canvas>
+        </div>
+
+        <div class="preset-strip" role="group" aria-label="Shader and 3D Presets">
+          <button type="button" class="preset-btn active" data-preset="cyberBust" onclick="selectPreset('cyberBust', this)">Cyber Bust 3D</button>
+          <button type="button" class="preset-btn" data-preset="torus4d" onclick="selectPreset('torus4d', this)">4D Torus Knot</button>
+          <button type="button" class="preset-btn" data-preset="merkaba" onclick="selectPreset('merkaba', this)">Sacred Merkaba</button>
+          <button type="button" class="preset-btn" data-preset="datamosh" onclick="selectPreset('datamosh', this)">CRT Datamosh</button>
+          <button type="button" class="preset-btn" data-preset="radar" onclick="selectPreset('radar', this)">Perimeter Radar</button>
+          <button type="button" class="preset-btn" data-preset="sigil" onclick="selectPreset('sigil', this)">ZothOS Sigil</button>
+        </div>
+      </div>
+
+      <!-- Right: Quantizer & Post-FX Controls -->
+      <div class="panel">
+        <div class="panel-header">
+          <span>QUANTIZER &amp; SOBEL EDGE MATRIX</span>
+          <span style="color:#34D399;">0 EGRESS</span>
+        </div>
+        <div class="controls-body">
+          <div>
+            <div style="font-family:var(--font-mono); font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;">
+              GLYPH RAMP PALETTE
+            </div>
+            <div class="ramp-grid">
+              <button type="button" class="preset-btn active" data-ramp="ascii" onclick="selectRamp('ascii', this)">Sovereign ASCII</button>
+              <button type="button" class="preset-btn" data-ramp="braille" onclick="selectRamp('braille', this)">Unicode Braille</button>
+              <button type="button" class="preset-btn" data-ramp="blocks" onclick="selectRamp('blocks', this)">Block Density</button>
+              <button type="button" class="preset-btn" data-ramp="katakana" onclick="selectRamp('katakana', this)">Cyber Katakana</button>
+              <button type="button" class="preset-btn" data-ramp="mosaic" onclick="selectRamp('mosaic', this)">LEGO / Mosaic</button>
+              <button type="button" class="preset-btn" data-ramp="hex" onclick="selectRamp('hex', this)">Hex Telemetry</button>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <button type="button" id="sobelBtn" class="btn btn-cyan" onclick="toggleSobel()">
+              Sobel Edges: ON (/\|-)
+            </button>
+            <button type="button" id="crtBtn" class="btn" onclick="toggleCrt()">
+              CRT Scanlines: ON
+            </button>
+          </div>
+
+          <div class="control-group">
+            <label for="colsRange"><span>MATRIX COLUMNS</span><span id="colsVal">76 cols</span></label>
+            <input id="colsRange" type="range" min="40" max="110" step="2" value="76" oninput="updateParams()">
+          </div>
+
+          <div class="control-group">
+            <label for="edgeRange"><span>SOBEL EDGE THRESHOLD</span><span id="edgeVal">0.34</span></label>
+            <input id="edgeRange" type="range" min="0.15" max="0.75" step="0.02" value="0.34" oninput="updateParams()">
+          </div>
+
+          <div class="control-group">
+            <label for="speedRange"><span>TEMPORAL VELOCITY</span><span id="speedVal">1.00x</span></label>
+            <input id="speedRange" type="range" min="0.1" max="2.5" step="0.05" value="1.0" oninput="updateParams()">
+          </div>
+
+          <div class="control-group">
+            <label for="warpRange"><span>HARMONIC WARP</span><span id="warpVal">1.15</span></label>
+            <input id="warpRange" type="range" min="0.3" max="2.4" step="0.05" value="1.15" oninput="updateParams()">
+          </div>
+
+          <div style="padding-top:6px; border-top:1px solid var(--border-subtle); display:flex; flex-direction:column; gap:8px;">
+            <button type="button" class="btn btn-gold" onclick="interceptExport('html')">
+              ⚡ Export Standalone HTML/JS Embed
+            </button>
+            <button type="button" class="btn" onclick="interceptExport('ansi')">
+              🖥 Download 24-Bit TrueColor ANSI (.ans)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Frosted Glass Output Paywall Blur Section -->
+    <section class="paywall-wrapper" aria-label="Exported ASCII & ANSI Code Output">
+      <div class="panel-header">
+        <span>GENERATED 24-BIT ANSI &amp; STANDALONE HTML/JS STREAM</span>
+        <span id="paywallStatusText" style="color:var(--gold);">🔒 PRO EXPORT LOCKED</span>
+      </div>
+      <pre id="asciiOutputPre" class="paywall-blur-target">Initializing deterministic ASCII &amp; Sobel edge matrix...</pre>
+      <div id="paywallOverlay" class="paywall-overlay">
+        <div style="font-family:var(--font-display); font-size:1.15rem; font-weight:800; color:var(--gold-soft);">
+          🔒 Unlock Raw 24-Bit TrueColor ANSI, HTML/JS Shader &amp; High-Res Exports
+        </div>
+        <p style="font-size:0.85rem; color:var(--text-muted); max-width:540px;">
+          Founding Member Lifetime License ($19 instead of $79) unlocks unlimited commercial exports, 24-bit ANSI terminal streams, standalone zero-dependency web embeds, and the ZothOS CLI.
+        </p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:4px;">
+          <a class="btn btn-gold" href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L" target="_blank" rel="noopener">
+            💳 Instant Unlock via Stripe ($19)
+          </a>
+          <button class="btn btn-solana" type="button" onclick="triggerSolanaCheckout()">
+            ◎ Unlock with Solana (DePay)
+          </button>
+          <button class="btn" type="button" onclick="openLicenseModal()">
+            🔑 Enter Receipt / License Key
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pro Paywall & License Activation Modal -->
+  <div id="licenseModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h2 id="modalTitle" style="font-family:var(--font-display); font-size:1.2rem; color:var(--gold-soft);">
+          ⭐ Zoth ASCII Magic Pro — Lifetime Access
+        </h2>
+        <button class="btn" type="button" style="min-height:36px; padding:4px 10px;" onclick="closeLicenseModal()">✕</button>
+      </div>
+      <p style="font-size:0.86rem; color:var(--text-muted); margin-bottom:14px;">
+        Unlock all 6 glyph quantizers, 24-bit TrueColor ANSI streams, standalone HTML/JS embeds, and high-res PNG renders forever.
+      </p>
+      <ul style="font-size:0.82rem; color:var(--text); line-height:1.7; margin-left:18px; margin-bottom:16px;">
+        <li>✔ Unlimited 24-Bit TrueColor ANSI (<code>\x1b[38;2;r;g;bm</code>) Exports</li>
+        <li>✔ Self-Contained 60fps HTML/JS Shader Snippet Generator</li>
+        <li>✔ Sobel Directional Edge Detection &amp; Interactive 2D Relighting</li>
+        <li>✔ High-Resolution Transparent &amp; Obsidian PNG Poster Exports</li>
+        <li>✔ ZothOS Local CLI (<code>zoth-ascii-magic</code>) Commercial License</li>
+        <li>✔ Zero Cloud Telemetry — 100% Client-Side Execution</li>
+      </ul>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px;">
+        <a class="btn btn-gold" style="flex:1;" href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L" target="_blank" rel="noopener">
+          💳 Checkout with Stripe ($19)
+        </a>
+        <button class="btn btn-solana" style="flex:1;" type="button" onclick="triggerSolanaCheckout()">
+          ◎ Pay with Solana
+        </button>
+      </div>
+      <div style="border-top:1px solid var(--border-subtle); padding-top:12px;">
+        <label for="licenseKeyInput" style="font-family:var(--font-mono); font-size:0.74rem; color:var(--text-muted);">
+          ALREADY PURCHASED? ENTER RECEIPT EMAIL OR PRO KEY:
+        </label>
+        <input id="licenseKeyInput" class="key-input" type="text" placeholder="e.g. founder@domain.com or ZOTH-PRO-XXXX">
+        <button class="btn btn-cyan" type="button" style="width:100%; margin-top:10px;" onclick="activateLicenseKey()">
+          🔓 Verify &amp; Unlock Pro Studio
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>Engineered by Neal Frazier Tech (<a href="https://github.com/1nc0gn30/zoth-ascii-magic" target="_blank" rel="noopener">@1nc0gn30</a>) • <a href="https://nullai.tech" target="_blank" rel="noopener">NullAI Platform</a> &amp; <a href="https://zoth.nullai.tech" target="_blank" rel="noopener">Zoth Studio</a></div>
+  </footer>
+
+  <script>
+    const RAMPS = {
+      ascii: " ·,:;+*?%S#@",
+      braille: " ⠁⠃⠇⠏⠟⠿⣿",
+      blocks: " ·░▒▓█",
+      katakana: " ·:+=*ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿ",
+      mosaic: " ·◦•○◎●◉",
+      hex: " .01379ACEF#"
+    };
+
+    const PRESET_COLORS = {
+      cyberBust: [56, 189, 248],
+      torus4d: [212, 175, 55],
+      merkaba: [192, 132, 252],
+      datamosh: [236, 72, 153],
+      radar: [52, 211, 153],
+      sigil: [245, 158, 11]
+    };
+
+    let state = {
+      preset: 'cyberBust',
+      ramp: 'ascii',
+      cols: 76,
+      edgeThreshold: 0.34,
+      speed: 1.0,
+      warp: 1.15,
+      sobel: true,
+      crt: true,
+      playing: true,
+      light: { x: -0.35, y: -0.35 },
+      uploadedGrid: null,
+      uploadedName: '',
+      licensed: false,
+      lastAscii: '',
+      lastAnsi: ''
+    };
+
+    const canvas = document.getElementById('asciiCanvas');
+    const ctx = canvas.getContext('2d');
+    let time = 0;
+    let lastTs = performance.now();
+    let frameCount = 0;
+    let isDragging = false;
+
+    function checkLicenseOnLoad() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('licensed') === 'true' || localStorage.getItem('zoth_ascii_magic_pro') === 'true') {
+        unlockPro();
+      }
+    }
+
+    function unlockPro() {
+      state.licensed = true;
+      localStorage.setItem('zoth_ascii_magic_pro', 'true');
+      document.getElementById('asciiOutputPre').classList.add('unlocked');
+      document.getElementById('paywallOverlay').classList.add('hidden');
+      document.getElementById('licenseBadge').textContent = '⭐ PRO ACTIVE';
+      document.getElementById('paywallStatusText').textContent = '⭐ PRO UNLOCKED';
+      closeLicenseModal();
+    }
+
+    function openLicenseModal() {
+      document.getElementById('licenseModal').classList.add('open');
+    }
+
+    function closeLicenseModal() {
+      document.getElementById('licenseModal').classList.remove('open');
+    }
+
+    function activateLicenseKey() {
+      const val = (document.getElementById('licenseKeyInput').value || '').trim();
+      if (val.length >= 4 && (val.includes('@') || val.toUpperCase().startsWith('ZOTH') || val.length >= 6)) {
+        unlockPro();
+      } else {
+        alert('Please enter your Stripe receipt email or ZOTH-PRO license key.');
+      }
+    }
+
+    function triggerSolanaCheckout() {
+      if (window.DePayWidgets) {
+        window.DePayWidgets.Payment({
+          integration: '428790dd-7ad1-407c-8ecf-c048c77a4cb8',
+          accept: [{
+            blockchain: 'solana',
+            amount: 19,
+            token: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+            receiver: 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK'
+          }]
+        });
+      } else {
+        window.open('https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L', '_blank');
+      }
+    }
+
+    function interceptExport(kind) {
+      if (!state.licensed) {
+        openLicenseModal();
+        return;
+      }
+      if (kind === 'copy') {
+        navigator.clipboard.writeText(state.lastAscii);
+        alert('ASCII Matrix copied to clipboard!');
+      } else if (kind === 'ansi') {
+        const blob = new Blob([state.lastAnsi], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `zoth-ascii-magic-${state.preset}.ans`;
+        a.click();
+      } else if (kind === 'html') {
+        const htmlSnippet = `<pre style="background:#050508;color:#D4AF37;font:600 10px/1.15 'JetBrains Mono',monospace;padding:18px;border-radius:12px;">\n${state.lastAscii}\n</pre>`;
+        navigator.clipboard.writeText(htmlSnippet);
+        alert('Standalone HTML/CSS <pre> snippet copied to clipboard!');
+      } else if (kind === 'png') {
+        const a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        a.download = `zoth-ascii-magic-${state.preset}.png`;
+        a.click();
+      }
+    }
+
+    function selectPreset(id, btn) {
+      state.preset = id;
+      state.uploadedGrid = null;
+      state.uploadedName = '';
+      document.querySelectorAll('[data-preset]').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    function selectRamp(id, btn) {
+      state.ramp = id;
+      document.querySelectorAll('[data-ramp]').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    function toggleSobel() {
+      state.sobel = !state.sobel;
+      const btn = document.getElementById('sobelBtn');
+      btn.textContent = `Sobel Edges: ${state.sobel ? 'ON (/\\|-)' : 'OFF'}`;
+    }
+
+    function toggleCrt() {
+      state.crt = !state.crt;
+      const btn = document.getElementById('crtBtn');
+      btn.textContent = `CRT Scanlines: ${state.crt ? 'ON' : 'OFF'}`;
+    }
+
+    function togglePlay() {
+      state.playing = !state.playing;
+      document.getElementById('playBtn').textContent = state.playing ? '⏸ Pause' : '▶ Resume';
+    }
+
+    function updateParams() {
+      state.cols = parseInt(document.getElementById('colsRange').value, 10);
+      state.edgeThreshold = parseFloat(document.getElementById('edgeRange').value);
+      state.speed = parseFloat(document.getElementById('speedRange').value);
+      state.warp = parseFloat(document.getElementById('warpRange').value);
+
+      document.getElementById('colsVal').textContent = `${state.cols} cols`;
+      document.getElementById('edgeVal').textContent = state.edgeThreshold.toFixed(2);
+      document.getElementById('speedVal').textContent = `${state.speed.toFixed(2)}x`;
+      document.getElementById('warpVal').textContent = state.warp.toFixed(2);
+    }
+
+    function handleImageFile(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const off = document.createElement('canvas');
+          const w = 128, h = 72;
+          off.width = w;
+          off.height = h;
+          const octx = off.getContext('2d');
+          octx.drawImage(img, 0, 0, w, h);
+          const imgData = octx.getImageData(0, 0, w, h).data;
+          state.uploadedGrid = { width: w, height: h, data: imgData };
+          state.uploadedName = file.name;
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function evalProcedural(nx, ny, t) {
+      const x = nx * 1.25;
+      const y = ny * 1.25;
+      const r = Math.hypot(x, y);
+      const a = Math.atan2(y, x);
+      let base = 0.5;
+
+      if (state.preset === 'cyberBust') {
+        const headR = 0.68;
+        const dHead = Math.hypot(nx, ny * 0.92 + 0.05);
+        const halo = Math.exp(-Math.abs(r - 0.88) * 14) * (0.65 + 0.35 * Math.sin(a * 8 - t * 3));
+        if (dHead < headR) {
+          const nz = Math.sqrt(Math.max(0.001, headR * headR - dHead * dHead)) / headR;
+          const lx = state.light.x - nx;
+          const ly = state.light.y - ny;
+          const lz = 0.85;
+          const lLen = Math.hypot(lx, ly, lz);
+          const ndotl = Math.max(0.08, (nx * (lx / lLen) + ny * (ly / lLen) + nz * (lz / lLen)));
+          const visor = Math.abs(ny + 0.08 - 0.04 * Math.cos(nx * 3)) < 0.11 && Math.abs(nx) < 0.48
+            ? 0.35 + 0.55 * Math.sin(nx * 14 + t * 5)
+            : 0;
+          return Math.min(1, ndotl * 0.85 + visor * 0.45);
+        }
+        const gridBg = Math.max(0, Math.sin(nx * 18) * Math.cos((ny + t * 0.25) * 18)) * 0.15;
+        return Math.min(1, halo + gridBg);
+      }
+
+      if (state.preset === 'torus4d') {
+        const ring1 = Math.cos((r - 0.52 - 0.14 * Math.sin(3 * a + t * 2.1)) * 13);
+        const twist = Math.sin(4 * a - t * 2.6 + r * 6 * state.warp);
+        const core = Math.exp(-r * 2.2) * Math.cos(r * 16 - t * 4);
+        base = Math.max(0, Math.min(1, ring1 * 0.5 + twist * 0.35 + core * 0.45 + 0.55));
+      } else if (state.preset === 'merkaba') {
+        const tri1 = Math.cos(3 * (a + t * 0.9)) * Math.exp(-Math.abs(r - 0.55) * 4.5);
+        const tri2 = Math.cos(3 * (a - t * 0.9 + Math.PI / 3)) * Math.exp(-Math.abs(r - 0.55) * 4.5);
+        const center = Math.exp(-r * 3.8);
+        base = Math.max(0, Math.min(1, 0.48 + tri1 * 0.45 + tri2 * 0.45 + center * 0.4));
+      } else if (state.preset === 'datamosh') {
+        const shift = Math.sin(Math.floor((ny + 1) * 12) * 3.7 + Math.floor(t * 6)) * 0.35 * state.warp;
+        const band = Math.sin((x + shift) * 8 - t * 5) * Math.cos(y * 14 + Math.sin(t * 3) * 2);
+        base = Math.max(0, Math.min(1, 0.5 + band * 0.48));
+      } else if (state.preset === 'radar') {
+        const sweep = (t * 2.2) % (Math.PI * 2);
+        const diff = (((a - sweep) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+        const beam = Math.exp(-diff * 3.2) * Math.exp(-r * 0.9);
+        const rings = Math.pow(Math.max(0, Math.cos(r * 16)), 6) * 0.55;
+        base = Math.max(0, Math.min(1, beam * 0.85 + rings));
+      } else {
+        const hexWave = Math.cos(6 * a + Math.sin(r * 10 - t * 3) * state.warp * 2);
+        const seal = Math.exp(-Math.abs(r - 0.62) * 6.5) + Math.exp(-Math.abs(r - 0.32) * 7.5);
+        base = Math.max(0, Math.min(1, 0.25 + seal * 0.55 + hexWave * 0.28));
+      }
+
+      const dLight = Math.hypot(nx - state.light.x, ny - state.light.y);
+      return Math.max(0, Math.min(1, base * 0.82 + Math.exp(-dLight * 1.45) * 0.38));
+    }
+
+    function updateLightFromEvent(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const nx = (((clientX - rect.left) / rect.width) * 2 - 1) * 1.25;
+      const ny = ((clientY - rect.top) / rect.height) * 2 - 1;
+      state.light.x = Math.max(-1.3, Math.min(1.3, nx));
+      state.light.y = Math.max(-1.0, Math.min(1.0, ny));
+    }
+
+    const stageEl = document.getElementById('canvasContainer');
+    stageEl.addEventListener('mousedown', (e) => { isDragging = true; updateLightFromEvent(e); });
+    window.addEventListener('mousemove', (e) => { if (isDragging) updateLightFromEvent(e); });
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    function renderLoop(now) {
+      const dt = Math.min(0.05, (now - lastTs) / 1000);
+      lastTs = now;
+      if (state.playing) time += dt * state.speed;
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cw = canvas.clientWidth || 720;
+      const ch = canvas.clientHeight || 420;
+      if (canvas.width !== cw * dpr || canvas.height !== ch * dpr) {
+        canvas.width = cw * dpr;
+        canvas.height = ch * dpr;
+      }
+
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.fillStyle = '#040508';
+      ctx.fillRect(0, 0, cw, ch);
+
+      const cols = state.cols;
+      const rows = Math.max(18, Math.round(cols * (ch / cw) * 0.55));
+      const cellW = cw / cols;
+      const cellH = ch / rows;
+      const fontSize = Math.max(8, Math.min(16, Math.floor(cellH * 0.92)));
+      const ramp = RAMPS[state.ramp] || RAMPS.ascii;
+      const baseRgb = PRESET_COLORS[state.preset] || PRESET_COLORS.cyberBust;
+
+      ctx.font = `600 ${fontSize}px "JetBrains Mono", monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      const lumGrid = new Float32Array(rows * cols);
+      const rgbGrid = new Uint8Array(rows * cols * 3);
+
+      for (let r = 0; r < rows; r++) {
+        const ny = (r / (rows - 1)) * 2 - 1;
+        for (let c = 0; c < cols; c++) {
+          const nx = ((c / (cols - 1)) * 2 - 1) * (cw / ch) * 0.72;
+          const idx = r * cols + c;
+          if (state.uploadedGrid) {
+            const ix = Math.min(state.uploadedGrid.width - 1, Math.floor((c / cols) * state.uploadedGrid.width));
+            const iy = Math.min(state.uploadedGrid.height - 1, Math.floor((r / rows) * state.uploadedGrid.height));
+            const p = (iy * state.uploadedGrid.width + ix) * 4;
+            const pr = state.uploadedGrid.data[p];
+            const pg = state.uploadedGrid.data[p + 1];
+            const pb = state.uploadedGrid.data[p + 2];
+            const dLight = Math.hypot(nx - state.light.x, ny - state.light.y);
+            const mult = 0.75 + Math.exp(-dLight * 1.4) * 0.65;
+            lumGrid[idx] = Math.min(1, ((0.299 * pr + 0.587 * pg + 0.114 * pb) / 255) * mult);
+            rgbGrid[idx * 3] = Math.min(255, pr * mult);
+            rgbGrid[idx * 3 + 1] = Math.min(255, pg * mult);
+            rgbGrid[idx * 3 + 2] = Math.min(255, pb * mult);
+          } else {
+            const v = evalProcedural(nx, ny, time);
+            lumGrid[idx] = v;
+            if (v > 0.78) {
+              rgbGrid[idx * 3] = 255;
+              rgbGrid[idx * 3 + 1] = 248;
+              rgbGrid[idx * 3 + 2] = 225;
+            } else {
+              rgbGrid[idx * 3] = Math.round(baseRgb[0] * (0.35 + v * 0.65));
+              rgbGrid[idx * 3 + 1] = Math.round(baseRgb[1] * (0.35 + v * 0.65));
+              rgbGrid[idx * 3 + 2] = Math.round(baseRgb[2] * (0.35 + v * 0.65));
+            }
+          }
+        }
+      }
+
+      const capture = frameCount % 15 === 0;
+      const asciiLines = [];
+      const ansiLines = [];
+
+      for (let r = 0; r < rows; r++) {
+        let rowTxt = '';
+        let rowAnsi = '';
+        for (let c = 0; c < cols; c++) {
+          const idx = r * cols + c;
+          const v = lumGrid[idx];
+          let chGlyph = ramp[Math.min(ramp.length - 1, Math.max(0, Math.floor(v * ramp.length)))];
+
+          if (state.sobel && r > 0 && r < rows - 1 && c > 0 && c < cols - 1) {
+            const gx =
+              -lumGrid[(r - 1) * cols + (c - 1)] + lumGrid[(r - 1) * cols + (c + 1)]
+              - 2 * lumGrid[r * cols + (c - 1)] + 2 * lumGrid[r * cols + (c + 1)]
+              - lumGrid[(r + 1) * cols + (c - 1)] + lumGrid[(r + 1) * cols + (c + 1)];
+            const gy =
+              -lumGrid[(r - 1) * cols + (c - 1)] - 2 * lumGrid[(r - 1) * cols + c] - lumGrid[(r - 1) * cols + (c + 1)]
+              + lumGrid[(r + 1) * cols + (c - 1)] + 2 * lumGrid[(r + 1) * cols + c] + lumGrid[(r + 1) * cols + (c + 1)];
+            if (Math.hypot(gx, gy) > state.edgeThreshold) {
+              const deg = ((Math.atan2(gy, gx) * 180) / Math.PI + 180) % 180;
+              if (deg < 22.5 || deg >= 157.5) chGlyph = '|';
+              else if (deg < 67.5) chGlyph = '/';
+              else if (deg < 112.5) chGlyph = '-';
+              else chGlyph = '\\';
+            }
+          }
+
+          const cr = rgbGrid[idx * 3];
+          const cg = rgbGrid[idx * 3 + 1];
+          const cb = rgbGrid[idx * 3 + 2];
+
+          if (capture) {
+            rowTxt += chGlyph;
+            rowAnsi += `\x1b[38;2;${cr};${cg};${cb}m${chGlyph}`;
+          }
+
+          if (chGlyph !== ' ') {
+            ctx.fillStyle = `rgba(${cr},${cg},${cb},${(0.2 + v * 0.8).toFixed(2)})`;
+            ctx.fillText(chGlyph, c * cellW + cellW * 0.5, r * cellH + cellH * 0.5);
+          }
+        }
+        if (capture) {
+          asciiLines.push(rowTxt);
+          ansiLines.push(rowAnsi + '\x1b[0m');
+        }
+      }
+
+      if (state.crt) {
+        ctx.fillStyle = 'rgba(0,0,0,0.24)';
+        for (let y = 0; y < ch; y += 3) {
+          ctx.fillRect(0, y, cw, 1);
+        }
+      }
+
+      // Draw Light Source handle
+      const lxPx = ((state.light.x / 1.25 + 1) * 0.5) * cw;
+      const lyPx = ((state.light.y + 1) * 0.5) * ch;
+      ctx.beginPath();
+      ctx.arc(lxPx, lyPx, 7, 0, Math.PI * 2);
+      ctx.strokeStyle = '#F5E6AB';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.restore();
+
+      if (capture) {
+        state.lastAscii = asciiLines.join('\n');
+        state.lastAnsi = ansiLines.join('\n');
+        document.getElementById('asciiOutputPre').textContent = state.lastAscii;
+        const srcName = state.uploadedName ? `IMAGE: ${state.uploadedName}` : state.preset.toUpperCase();
+        document.getElementById('hudStatus').textContent = `STAGE // ${srcName} // ${cols}x${rows} // DRAG TO RELIGHT`;
+      }
+
+      frameCount++;
+      requestAnimationFrame(renderLoop);
+    }
+
+    checkLicenseOnLoad();
+    requestAnimationFrame(renderLoop);
+  </script>
+</body>
+</html>
