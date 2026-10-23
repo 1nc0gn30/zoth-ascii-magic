@@ -846,6 +846,9 @@
             <button class="pill-btn" type="button" onclick="togglePlay()" id="playBtn">
               ⏸ Pause
             </button>
+            <button class="pill-btn" type="button" id="recordBtn" onclick="recordVideoClip(5.0)" style="color:#F43F5E; border-color:rgba(244,63,94,0.4);">
+              ⏺ Record WebM (5s)
+            </button>
             <button class="pill-btn" type="button" onclick="interceptExport('copy')">
               📋 Copy ASCII
             </button>
@@ -872,6 +875,7 @@
           <button type="button" class="pill-btn" data-preset="datamosh" onclick="selectPreset('datamosh', this)">CRT Datamosh</button>
           <button type="button" class="pill-btn" data-preset="radar" onclick="selectPreset('radar', this)">Perimeter Sonar</button>
           <button type="button" class="pill-btn" data-preset="sigil" onclick="selectPreset('sigil', this)">ZothOS Sigil</button>
+          <button type="button" class="pill-btn" data-preset="audioReactive" onclick="selectPreset('audioReactive', this)" style="color:#C084FC;">🎵 Audio Reactive</button>
         </div>
 
         <!-- Phosphor Tube Color Strips -->
@@ -898,6 +902,8 @@
           <div class="ramp-grid">
             <button type="button" class="pill-btn active" data-ramp="ascii" onclick="selectRamp('ascii', this)">Sovereign ASCII</button>
             <button type="button" class="pill-btn" data-ramp="braille" onclick="selectRamp('braille', this)">Unicode Braille</button>
+            <button type="button" class="pill-btn" data-ramp="atkinson" onclick="selectRamp('atkinson', this)">Atkinson (Mac 1984)</button>
+            <button type="button" class="pill-btn" data-ramp="floyd" onclick="selectRamp('floyd', this)">Floyd-Steinberg</button>
             <button type="button" class="pill-btn" data-ramp="bayer4" onclick="selectRamp('bayer4', this)">Bayer 4×4 Dither</button>
             <button type="button" class="pill-btn" data-ramp="bayer8" onclick="selectRamp('bayer8', this)">Bayer 8×8 Dither</button>
             <button type="button" class="pill-btn" data-ramp="blocks" onclick="selectRamp('blocks', this)">Block Density</button>
@@ -907,12 +913,17 @@
           </div>
         </div>
 
-        <!-- Sobel & Scanline Toggles -->
+        <!-- Audio Reactive, Sobel & Scanline Toggles -->
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <button type="button" id="audioModeBtn" class="pill-btn" style="color:#C084FC; border-color:rgba(192,132,252,0.4);" onclick="toggleAudioMode()">
+            🎵 Audio: OFF
+          </button>
           <button type="button" id="sobelBtn" class="pill-btn active" style="color:#38BDF8; border-color:rgba(56,189,248,0.4);" onclick="toggleSobel()">
             Sobel Edges: ON
           </button>
-          <button type="button" id="crtBtn" class="pill-btn active" style="color:#34D399; border-color:rgba(52,211,153,0.4);" onclick="toggleCrt()">
+        </div>
+        <div>
+          <button type="button" id="crtBtn" class="pill-btn active" style="width:100%; color:#34D399; border-color:rgba(52,211,153,0.4);" onclick="toggleCrt()">
             CRT Lines: ON
           </button>
         </div>
@@ -1067,6 +1078,8 @@
     const RAMPS = {
       ascii: " ·,:;+*?%S#@",
       braille: " ⠁⠃⠇⠏⠟⠿⣿",
+      atkinson: " ·░▒▓█",
+      floyd: " ·░▒▓█",
       bayer4: " ·░▒▓█",
       bayer8: "  ▂▃▄▅▆▇█",
       blocks: " ·░▒▓█",
@@ -1082,7 +1095,8 @@
       merkaba: [192, 132, 252],
       datamosh: [236, 72, 153],
       radar: [52, 211, 153],
-      sigil: [245, 158, 11]
+      sigil: [245, 158, 11],
+      audioReactive: [192, 132, 252]
     };
 
     const TUBE_PALETTES = {
@@ -1106,6 +1120,7 @@
       crt: true,
       playing: true,
       audioEnabled: true,
+      audioMode: 'off',
       light: { x: -0.35, y: -0.35 },
       uploadedGrid: null,
       uploadedName: '',
@@ -1149,6 +1164,264 @@
       state.audioEnabled = !state.audioEnabled;
       document.getElementById('soundBadge').textContent = `🔊 AUDIO: ${state.audioEnabled ? 'ON' : 'OFF'}`;
       if (state.audioEnabled) playClickSound(880, 'sine', 0.06);
+    }
+
+    /* ==========================================================================
+       ATKINSON & FLOYD-STEINBERG ERROR DIFFUSION ENGINES
+       ========================================================================== */
+    function runAtkinsonDither(lum, w, h, ramp) {
+      const K = ramp.length;
+      const maxK = K - 1;
+      const buf = new Float32Array(lum);
+      const out = new Array(w * h);
+
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const idx = y * w + x;
+          const oldVal = Math.max(0, Math.min(1, buf[idx]));
+          const k = Math.max(0, Math.min(maxK, Math.round(oldVal * maxK)));
+          const newVal = k / maxK;
+          out[idx] = ramp[k];
+
+          const err8 = (oldVal - newVal) * 0.125;
+          if (err8 === 0) continue;
+
+          if (x + 1 < w) buf[idx + 1] += err8;
+          if (x + 2 < w) buf[idx + 2] += err8;
+          if (y + 1 < h) {
+            if (x - 1 >= 0) buf[(y + 1) * w + (x - 1)] += err8;
+            buf[(y + 1) * w + x] += err8;
+            if (x + 1 < w) buf[(y + 1) * w + (x + 1)] += err8;
+          }
+          if (y + 2 < h) {
+            buf[(y + 2) * w + x] += err8;
+          }
+        }
+      }
+      return out;
+    }
+
+    function runFloydSteinbergDither(lum, w, h, ramp) {
+      const K = ramp.length;
+      const maxK = K - 1;
+      const buf = new Float32Array(lum);
+      const out = new Array(w * h);
+
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const idx = y * w + x;
+          const oldVal = Math.max(0, Math.min(1, buf[idx]));
+          const k = Math.max(0, Math.min(maxK, Math.round(oldVal * maxK)));
+          const newVal = k / maxK;
+          out[idx] = ramp[k];
+
+          const err = oldVal - newVal;
+          if (err === 0) continue;
+
+          if (x + 1 < w) buf[idx + 1] += err * (7 / 16);
+          if (y + 1 < h) {
+            if (x - 1 >= 0) buf[(y + 1) * w + (x - 1)] += err * (3 / 16);
+            buf[(y + 1) * w + x] += err * (5 / 16);
+            if (x + 1 < w) buf[(y + 1) * w + (x + 1)] += err * (1 / 16);
+          }
+        }
+      }
+      return out;
+    }
+
+    /* ==========================================================================
+       WEBAUDIO ANALYSER & AUDIO REACTIVE PIPELINE
+       ========================================================================== */
+    class AudioReactiveEngine {
+      constructor() {
+        this.fftSize = 128;
+        this.ctx = null;
+        this.analyser = null;
+        this.mediaStream = null;
+        this.synthOscs = [];
+        this.freqData = new Uint8Array(64);
+        this.timeData = new Uint8Array(128);
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContextClass();
+          this.analyser = this.ctx.createAnalyser();
+          this.analyser.fftSize = this.fftSize;
+          this.analyser.smoothingTimeConstant = 0.82;
+        }
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+      }
+
+      startSynth() {
+        this.init();
+        this.stop();
+        const root = this.ctx.createOscillator();
+        const fifth = this.ctx.createOscillator();
+        const lfo = this.ctx.createOscillator();
+        const lfoGain = this.ctx.createGain();
+        const outGain = this.ctx.createGain();
+
+        root.type = 'sawtooth';
+        root.frequency.setValueAtTime(110, this.ctx.currentTime);
+        fifth.type = 'triangle';
+        fifth.frequency.setValueAtTime(165, this.ctx.currentTime);
+
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(0.5, this.ctx.currentTime);
+        lfoGain.gain.setValueAtTime(20, this.ctx.currentTime);
+        lfo.connect(lfoGain);
+        lfoGain.connect(root.frequency);
+
+        outGain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+        root.connect(outGain);
+        fifth.connect(outGain);
+        outGain.connect(this.analyser);
+        this.analyser.connect(this.ctx.destination);
+
+        root.start();
+        fifth.start();
+        lfo.start();
+        this.synthOscs = [root, fifth, lfo];
+      }
+
+      async startMic() {
+        this.init();
+        this.stop();
+        this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        const src = this.ctx.createMediaStreamSource(this.mediaStream);
+        src.connect(this.analyser);
+      }
+
+      stop() {
+        if (this.synthOscs.length) {
+          this.synthOscs.forEach(o => { try { o.stop(); o.disconnect(); } catch (e) {} });
+          this.synthOscs = [];
+        }
+        if (this.mediaStream) {
+          this.mediaStream.getTracks().forEach(t => t.stop());
+          this.mediaStream = null;
+        }
+      }
+
+      sample() {
+        if (!this.analyser) return { bass: 0.2, mid: 0.2, treble: 0.2, rms: 0.2 };
+        this.analyser.getByteFrequencyData(this.freqData);
+        this.analyser.getByteTimeDomainData(this.timeData);
+
+        let bass = 0, mid = 0, treble = 0, total = 0;
+        for (let i = 0; i < 64; i++) {
+          const val = this.freqData[i] / 255;
+          total += val;
+          if (i < 8) bass += val;
+          else if (i < 32) mid += val;
+          else treble += val;
+        }
+        return {
+          bass: bass / 8,
+          mid: mid / 24,
+          treble: treble / 32,
+          rms: total / 64
+        };
+      }
+    }
+
+    let audioViz = null;
+
+    function toggleAudioMode() {
+      if (!audioViz) audioViz = new AudioReactiveEngine();
+      const btn = document.getElementById('audioModeBtn');
+      if (state.audioMode === 'off') {
+        state.audioMode = 'synth';
+        audioViz.startSynth();
+        btn.textContent = '🎵 Audio: SYNTH';
+        btn.style.color = '#34D399';
+        btn.style.borderColor = 'rgba(52,211,153,0.5)';
+      } else if (state.audioMode === 'synth') {
+        audioViz.startMic().then(() => {
+          state.audioMode = 'mic';
+          btn.textContent = '🎙️ Audio: MIC';
+          btn.style.color = '#F43F5E';
+          btn.style.borderColor = 'rgba(244,63,94,0.5)';
+        }).catch(() => {
+          state.audioMode = 'off';
+          audioViz.stop();
+          btn.textContent = '🎵 Audio: OFF';
+          btn.style.color = '#C084FC';
+          btn.style.borderColor = 'rgba(192,132,252,0.4)';
+        });
+      } else {
+        state.audioMode = 'off';
+        audioViz.stop();
+        btn.textContent = '🎵 Audio: OFF';
+        btn.style.color = '#C084FC';
+        btn.style.borderColor = 'rgba(192,132,252,0.4)';
+      }
+    }
+
+    /* ==========================================================================
+       CLIENT-SIDE CANVAS WEBM VIDEO RECORDER
+       ========================================================================== */
+    async function recordVideoClip(durationSec = 5.0) {
+      if (!state.licensed) {
+        openLicenseModal();
+        return;
+      }
+      const btn = document.getElementById('recordBtn');
+      btn.disabled = true;
+      playClickSound(1200, 'sine', 0.1);
+
+      const stream = canvas.captureStream(30);
+      let mimeType = 'video/webm;codecs=vp9';
+      if (typeof MediaRecorder === 'undefined') {
+        alert('MediaRecorder is not supported in this browser.');
+        btn.disabled = false;
+        return;
+      }
+      if (!MediaRecorder.isTypeSupported(mimeType)) {
+        mimeType = MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : 'video/mp4';
+      }
+
+      const chunks = [];
+      let recorder = null;
+      try {
+        recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 4000000 });
+      } catch (e) {
+        recorder = new MediaRecorder(stream);
+      }
+
+      recorder.ondataavailable = (e) => {
+        if (e.data && e.data.size > 0) chunks.push(e.data);
+      };
+
+      const startTime = Date.now();
+      const timer = setInterval(() => {
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        btn.textContent = `⏺ REC ${elapsed}s / ${durationSec}s`;
+      }, 100);
+
+      recorder.onstop = () => {
+        clearInterval(timer);
+        btn.textContent = `✅ Saved!`;
+        const blob = new Blob(chunks, { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `zoth-ascii-${state.preset}-${Date.now()}.webm`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = `⏺ Record WebM (5s)`;
+        }, 2000);
+      };
+
+      recorder.start(200);
+      setTimeout(() => {
+        if (recorder.state === 'recording') recorder.stop();
+      }, durationSec * 1000);
     }
 
     const canvas = document.getElementById('asciiCanvas');
@@ -1366,6 +1639,15 @@ ${textEls}
       const a = Math.atan2(y, x);
       let base = 0.5;
 
+      if (state.preset === 'audioReactive') {
+        const metrics = audioViz ? audioViz.sample() : { bass: 0.25, mid: 0.25, treble: 0.25, rms: 0.25 };
+        const bassRings = Math.sin(r * 18 - t * 6 * (1 + metrics.bass * 2.0)) * (0.4 + metrics.bass * 0.6);
+        const midStar = Math.cos(5 * a + t * 3) * Math.exp(-Math.abs(r - 0.55) * 5.0) * (0.5 + metrics.mid * 0.8);
+        const trebleSpark = Math.sin(nx * 24 + t * 8) * Math.cos(ny * 24) * metrics.treble * 0.45;
+        const centerPulse = Math.exp(-r * 3.5) * (0.3 + metrics.rms * 1.2);
+        return Math.max(0, Math.min(1, 0.2 + bassRings * 0.35 + midStar * 0.4 + centerPulse * 0.5 + trebleSpark));
+      }
+
       if (state.preset === 'liquidChrome') {
         const dx = nx - state.light.x;
         const dy = ny - state.light.y;
@@ -1525,13 +1807,20 @@ ${textEls}
       const asciiLines = [];
       const ansiLines = [];
 
+      let ditheredMap = null;
+      if (state.ramp === 'atkinson') {
+        ditheredMap = runAtkinsonDither(lumGrid, cols, rows, ramp);
+      } else if (state.ramp === 'floyd') {
+        ditheredMap = runFloydSteinbergDither(lumGrid, cols, rows, ramp);
+      }
+
       for (let r = 0; r < rows; r++) {
         let rowTxt = '';
         let rowAnsi = '';
         for (let c = 0; c < cols; c++) {
           const idx = r * cols + c;
           const v = lumGrid[idx];
-          let chGlyph = ramp[Math.min(ramp.length - 1, Math.max(0, Math.floor(v * ramp.length)))];
+          let chGlyph = ditheredMap ? ditheredMap[idx] : ramp[Math.min(ramp.length - 1, Math.max(0, Math.floor(v * ramp.length)))];
 
           // Ordered Bayer Dithering override
           if (state.ramp === 'bayer4') {
