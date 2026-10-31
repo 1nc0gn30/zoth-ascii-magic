@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zoth ASCII Magic Studio | Avant-Garde Image, 3D &amp; Sobel Edge ASCII/Braille Synthesizer</title>
-  <meta name="description" content="Avant-garde 100% client-side Image &amp; 3D-to-ASCII synthesizer. Features Bayer 4x4/8x8 ordered dithering, sub-pixel Unicode Braille, Sobel directional edge detection, interactive 2D relighting, liquid metal chrome SDF, and 24-bit TrueColor ANSI/SVG exports.">
+  <title>Zoth ASCII Magic Studio | Avant-Garde Image, 3D & Sobel Edge ASCII/Braille Synthesizer</title>
+  <meta name="description" content="Avant-garde 100% client-side Image & 3D-to-ASCII synthesizer. Features Bayer 4x4/8x8 ordered dithering, sub-pixel Unicode Braille, Sobel directional edge detection, interactive 2D relighting, liquid metal chrome SDF, and 24-bit TrueColor ANSI/SVG exports.">
   <meta name="keywords" content="ascii magic, image to ascii, bayer dithering, braille art generator, ansi art generator, sobel edge ascii, liquid metal shader, paper shaders, zoth studio, nullai, uncommon web">
   <meta name="author" content="Neal Frazier Tech">
 
   <!-- OpenGraph -->
-  <meta property="og:title" content="Zoth ASCII Magic Studio | Avant-Garde Image &amp; 3D ASCII/Braille Synthesizer">
+  <meta property="og:title" content="Zoth ASCII Magic Studio | Avant-Garde Image & 3D ASCII/Braille Synthesizer">
   <meta property="og:description" content="Sculpt continuous images, video frames, and 3D SDF geometry into relightable ASCII, Unicode Braille, Bayer dither, and 24-bit TrueColor ANSI art 100% in-browser.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://zoth-ascii-magic.netlify.app/">
@@ -22,8 +22,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@1nc0gn30">
   <meta name="twitter:creator" content="@1nc0gn30">
-  <meta name="twitter:title" content="Zoth ASCII Magic Studio | Avant-Garde Image &amp; 3D ASCII/Braille Synthesizer">
-  <meta name="twitter:description" content="100% client-side Image &amp; 3D to ASCII/Braille/ANSI synthesizer with Bayer dithering, Sobel directional edges, liquid metal chrome, and interactive point relighting.">
+  <meta name="twitter:title" content="Zoth ASCII Magic Studio | Avant-Garde Image & 3D ASCII/Braille Synthesizer">
+  <meta name="twitter:description" content="100% client-side Image & 3D to ASCII/Braille/ANSI synthesizer with Bayer dithering, Sobel directional edges, liquid metal chrome, and interactive point relighting.">
   <meta name="twitter:image" content="https://zoth-ascii-magic.netlify.app/assets/banner.png">
 
   <!-- Schema.org JSON-LD Graph -->
@@ -40,7 +40,7 @@
         "description": "Avant-garde 100% client-side Image-to-ASCII, Sub-Pixel Unicode Braille, Bayer 4x4/8x8 ordered dithering, Sobel directional edge detection, interactive 2D point relighting, and 24-bit TrueColor ANSI/SVG exporter.",
         "offers": {
           "@type": "Offer",
-          "price": "19.00",
+          "price": "0",
           "priceCurrency": "USD",
           "availability": "https://schema.org/InStock"
         },
@@ -74,7 +74,7 @@
             "name": "What export formats and payment options are supported?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "You can export scalable vector SVGs, 24-bit TrueColor ANSI (.ans) terminal streams, self-contained HTML/CSS <pre> blocks, raw ASCII text matrices, and high-res PNG renders. Pro Lifetime access ($19) supports Stripe (Card, Apple Pay, Google Pay) and Solana via DePay."
+              "text": "You can export scalable vector SVGs, 24-bit TrueColor ANSI (.ans) terminal streams, self-contained HTML/CSS <pre> blocks, raw ASCII text matrices, and high-res PNG renders. 100% free and open-access by default, with voluntary Buy Us a Coffee (Stripe) and Solana tips."
             }
           }
         ]
@@ -88,8 +88,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-  <script src="https://integrate.depay.com/widgets/v13.js" defer></script>
-
   <style>
     :root {
       --bg: #05060A;
@@ -200,7 +198,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      backdrop-filter: blur(8px);
+      backdrop-filter: none;
     }
 
     .sales-banner-left {
@@ -659,7 +657,7 @@
       color: var(--gold-soft);
       max-height: 280px;
       overflow: hidden;
-      filter: blur(6px);
+      filter: none;
       user-select: none;
       transition: filter 0.3s ease;
       white-space: pre;
@@ -675,7 +673,7 @@
       position: absolute;
       inset: 0;
       background: rgba(5, 6, 10, 0.78);
-      backdrop-filter: blur(5px);
+      backdrop-filter: none;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -694,7 +692,7 @@
       position: fixed;
       inset: 0;
       background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
+      backdrop-filter: none;
       display: none;
       align-items: center;
       justify-content: center;
@@ -750,31 +748,48 @@
       text-decoration: underline;
     }
   </style>
+
+  <!-- Zoth 100% Open-Access & Buy Us a Coffee Invariant -->
+  <script id="zoth-open-access-init">
+    (function() {
+      try {
+        var keys = ['agent_audiocipher_pro', 'agent_cyber_turtle_pro', 'agent_datamosh_pro', 'agent_nexus3d_pro', 'agent_policy_pro', 'audiocipher_license', 'audiocipher_pro_licensed', 'badge3d_pro_licensed', 'certpath_pro_key', 'certpath_pro_licensed', 'cron_rhythm_pro_key', 'cron_rhythm_pro_licensed', 'cwv-speed-engine_pro_licensed', 'cwv_pro_licensed', 'cyber_turtle_pro_licensed', 'datamosh_pro_licensed', 'deepsearch-research-agent_pro_licensed', 'deepsearch_pro_licensed', 'entropy_studio_licensed', 'envguard-secrets-vault_pro_licensed', 'envguard_pro_license', 'etsy_connector_pro', 'jwt_guard_licensed', 'mdg_pro_licensed', 'neuro_pro_licensed', 'nexus3d_pro_licensed', 'omnipost_pro_key', 'omnipost_pro_licensed', 'osint_pro_licensed', 'payload-entropy-studio_pro_licensed', 'polyglot_pro_licensed', 'pro_licensed', 'promptmaster_pro_licensed', 'promptmaster_pro_active', 'robots-txt-auditor_pro_licensed', 'robots_pro_licensed', 'schema_illustrator_pro_licensed', 'sovereign_pro_licensed', 'subsweep-lead-scanner_pro_licensed', 'subsweep_licensed', 'turtle_pro_licensed', 'ufo_sacred_licensed', 'vector-search-engine_pro_licensed', 'vector_studio_pro_licensed', 'web-security-guard_pro_licensed', 'web_security_guard_licensed', 'yourdigitalspace_pro', 'zela_guide_pro_licensed', 'zoth_ascii_magic_pro', 'zoth_audiocipher_licensed', 'zoth_badge3d_licensed', 'zoth_cyber_turtle_licensed', 'zoth_datamosh_licensed', 'zoth_etsy_licensed', 'zoth_nexus3d_licensed', 'zoth_osint_licensed', 'zoth_policy_licensed', 'zoth_sacred_licensed', 'zoth_ufo_licensed'];
+        for (var i = 0; i < keys.length; i++) {
+          localStorage.setItem(keys[i], 'true');
+        }
+        localStorage.setItem('pm_license_v2', JSON.stringify({ method: 'open_access', ref: 'free_forever', at: '2026-01-01T00:00:00Z' }));
+        window.isPro = true;
+        window.isProLicensed = true;
+      } catch (e) {}
+    })();
+  </script>
+  <style id="zoth-open-access-override">
+    .paywall-overlay, .output-paywall-overlay, #outputPaywallOverlay, #schemaPaywallOverlay,
+    #transformerPaywallOverlay, #proPaywallModal, #licenseModal, #salesBanner, #founding-offer-banner,
+    #funnelHeroBanner, [data-alias="paywallOverlay"], [data-alias="founding-offer-banner"] {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+    .paywall-wrap #outputPreview, .paywall-wrap #reportContentArea, .paywall-content,
+    .paywall-content.locked, .paywall-wrap.is-locked #outputPreview, .paywall-wrap.locked #outputPreview {
+      filter: none !important;
+      -webkit-filter: none !important;
+      user-select: auto !important;
+      pointer-events: auto !important;
+    }
+  </style>
+
 </head>
 <body>
-  <div class="ambient-aurora" aria-hidden="true"></div>
 
-  <!-- High-Converting Sales Funnel Banner -->
-  <aside class="sales-banner" aria-label="Founding Member Lifetime Offer">
-    <div class="sales-banner-left">
-      <span class="badge-urgent">⚡ FOUNDING MEMBER LIFETIME ($19)</span>
-      <span>
-        Unlock <strong>Bayer 4×4/8×8 Dither, Scalable Animated SVG, 24-Bit ANSI &amp; Standalone HTML Embeds</strong> —
-        <span class="price-strike">$79</span> <strong>$19 One-Time</strong>
-      </span>
-    </div>
-    <div class="sales-actions">
-      <a class="btn btn-gold" href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L" target="_blank" rel="noopener">
-        💳 Unlock via Stripe ($19)
-      </a>
-      <button class="btn btn-solana" type="button" onclick="triggerSolanaCheckout()">
-        ◎ Pay with Solana
-      </button>
-      <button class="btn" type="button" onclick="openLicenseModal()">
-        🔑 Activate Key
-      </button>
-    </div>
-  </aside>
+<div id="zoth-coffee-support-bar" style="background: linear-gradient(90deg, rgba(16,185,129,0.12), rgba(212,175,55,0.14)); border-bottom: 1px solid rgba(212,175,55,0.35); padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; z-index: 9999;">
+  <span style="color: #10B981; font-weight: 800;">✦ 100% FREE &amp; OPEN ACCESS · ZERO PAYWALLS</span>
+  <a href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer" style="background: #D4AF37; color: #08080B; padding: 4px 12px; border-radius: 6px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">☕ Buy Us a Coffee (Stripe)</a>
+  <a href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK" onclick="if(navigator.clipboard){navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');this.textContent='✓ Copied GG2eQb...dXoK!';}" style="background: rgba(20,241,149,0.15); color: #14F195; border: 1px solid rgba(20,241,149,0.45); padding: 4px 12px; border-radius: 6px; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">◎ Solana Tip (GG2e...dXoK)</a>
+</div>
+
+  <div class="ambient-aurora" aria-hidden="true"></div>
 
   <!-- Navigation / Header -->
   <header>
@@ -789,7 +804,7 @@
       <div>
         <div class="brand-title">Zoth ASCII Magic Studio</div>
         <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">
-          v2.7.0 • Uncommon Web Dither Engine • Sobel Contours &amp; 2D Point Relighting
+          v2.7.0 • Uncommon Web Dither Engine • Sobel Contours & 2D Point Relighting
         </div>
       </div>
     </div>
@@ -810,7 +825,7 @@
       <div class="conic-beam-inner" style="padding: 24px 28px;">
         <div class="hero-panel" style="border:none; padding:0; background:transparent; box-shadow:none; margin-bottom:0;">
           <div>
-            <h1>Avant-Garde ASCII, Bayer Dither &amp; Braille Synthesizer</h1>
+            <h1>Avant-Garde ASCII, Bayer Dither & Braille Synthesizer</h1>
             <p>
               Sculpt continuous raster images, camera frames, and mathematical 3D SDF geometry into 76-column ASCII, sub-pixel 2×4 Unicode Braille (<code style="color:var(--cyan);">0x2800</code>), Bayer 4×4/8×8 ordered dithering, and directional Sobel edge contours (<code style="color:var(--gold);">/\-|+</code>). Click and drag anywhere across the stage to reposition the 2D point light in real time.
             </p>
@@ -867,7 +882,7 @@
 
         <!-- Shader & Geometry Presets Strip -->
         <div class="strip-section">
-          <span class="strip-label">GEOMETRY &amp; SHADER PRESETS (UNCOMMON WEB)</span>
+          <span class="strip-label">GEOMETRY & SHADER PRESETS (UNCOMMON WEB)</span>
           <button type="button" class="pill-btn active" data-preset="cyberBust" onclick="selectPreset('cyberBust', this)">Cyber Bust 3D</button>
           <button type="button" class="pill-btn" data-preset="liquidChrome" onclick="selectPreset('liquidChrome', this)">Liquid Chrome SDF</button>
           <button type="button" class="pill-btn" data-preset="torus4d" onclick="selectPreset('torus4d', this)">4D Torus Knot</button>
@@ -896,7 +911,7 @@
       <aside class="sidebar-panel">
         <div>
           <div class="section-title">
-            <span>GLYPH QUANTIZER &amp; DITHER MATRIX</span>
+            <span>GLYPH QUANTIZER & DITHER MATRIX</span>
             <span style="color:#34D399;">0 EGRESS</span>
           </div>
           <div class="ramp-grid">
@@ -980,77 +995,18 @@
       </aside>
     </div>
 
-    <!-- Frosted Glass Output Paywall Blur Section -->
-    <section class="paywall-section" aria-label="Exported ASCII &amp; ANSI Code Output">
+    <!-- Live Output Section -->
+    <section class="viewport-panel" style="margin-top: 24px;" aria-label="Exported ASCII & ANSI Code Output">
       <div class="viewport-header">
-        <span>RAW 24-BIT ANSI STREAM &amp; STANDALONE EMBED BUFFER</span>
-        <span id="paywallStatusText" style="color:var(--gold); font-weight:800;">🔒 PRO EXPORT LOCKED</span>
+        <span>RAW 24-BIT ANSI STREAM & STANDALONE EMBED BUFFER</span>
+        <span id="paywallStatusText" style="color:var(--emerald); font-weight:800;">✦ 100% UNLOCKED · OPEN ACCESS</span>
       </div>
-      <pre id="asciiOutputPre" class="paywall-blur-target">Initializing deterministic ASCII, Bayer dither &amp; Sobel edge matrix...</pre>
-      <div id="paywallOverlay" class="paywall-overlay">
-        <div style="font-family:var(--font-display); font-size:1.3rem; font-weight:900; color:var(--gold-soft);">
-          🔒 Unlock Raw 24-Bit TrueColor ANSI, SVG Vectors &amp; HTML Embeds
-        </div>
-        <p style="font-size:0.88rem; color:var(--text-muted); max-width:580px; line-height:1.6;">
-          Founding Member Lifetime License ($19 instead of $79) permanently unlocks commercial exports, resolution-independent SVG vector files, 24-bit ANSI terminal streams, zero-dependency HTML embeds, and the companion ZothOS CLI.
-        </p>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:6px;">
-          <a class="btn btn-gold" href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L" target="_blank" rel="noopener">
-            💳 Instant Unlock via Stripe ($19)
-          </a>
-          <button class="btn btn-solana" type="button" onclick="triggerSolanaCheckout()">
-            ◎ Unlock with Solana (DePay)
-          </button>
-          <button class="btn" type="button" onclick="openLicenseModal()">
-            🔑 Enter Receipt / License Key
-          </button>
-        </div>
-      </div>
+      <pre id="asciiOutputPre" style="background:#040508; color:var(--text); font-family:var(--font-mono); font-size:11px; line-height:1.2; padding:18px; border-radius:12px; border:1px solid var(--border-subtle); overflow-x:auto; max-height:280px; user-select:text;">Initializing deterministic ASCII, Bayer dither & Sobel edge matrix...</pre>
     </section>
   </main>
 
-  <!-- Pro Paywall & License Activation Modal -->
-  <div id="licenseModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal-card">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-        <h2 id="modalTitle" style="font-family:var(--font-display); font-size:1.3rem; font-weight:900; color:var(--gold-soft);">
-          ⭐ Zoth ASCII Magic Pro — Lifetime Access
-        </h2>
-        <button class="btn" type="button" style="min-height:36px; padding:4px 12px;" onclick="closeLicenseModal()">✕</button>
-      </div>
-      <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:16px; line-height:1.6;">
-        Unlock all 8 quantizers, Bayer 4×4/8×8 ordered dithering, 24-bit TrueColor ANSI streams, standalone HTML/JS snippets, scalable SVG vector exports, and high-res PNG renders forever.
-      </p>
-      <ul style="font-size:0.84rem; color:var(--text); line-height:1.8; margin-left:20px; margin-bottom:18px;">
-        <li>✔ <strong>Scalable Vector SVG Exports</strong> with resolution-independent monospace paths</li>
-        <li>✔ <strong>Unlimited 24-Bit TrueColor ANSI</strong> (<code>\x1b[38;2;r;g;bm</code>) Terminal Streams</li>
-        <li>✔ <strong>Self-Contained 60fps HTML/JS Shader Embeds</strong> running without dependencies</li>
-        <li>✔ <strong>Bayer 4×4 / 8×8 Ordered Dithering</strong> &amp; Sub-Pixel 2×4 Unicode Braille</li>
-        <li>✔ <strong>Sobel Directional Contours</strong> &amp; Interactive 2D Point Light Shading</li>
-        <li>✔ <strong>Commercial License</strong> for Web &amp; ZothOS Linux CLI (<code>zoth-ascii-magic</code>)</li>
-      </ul>
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:18px;">
-        <a class="btn btn-gold" style="flex:1;" href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L" target="_blank" rel="noopener">
-          💳 Checkout with Stripe ($19)
-        </a>
-        <button class="btn btn-solana" style="flex:1;" type="button" onclick="triggerSolanaCheckout()">
-          ◎ Pay with Solana
-        </button>
-      </div>
-      <div style="border-top:1px solid var(--border-subtle); padding-top:14px;">
-        <label for="licenseKeyInput" style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">
-          ALREADY PURCHASED? ENTER RECEIPT EMAIL OR PRO KEY:
-        </label>
-        <input id="licenseKeyInput" class="key-input" type="text" placeholder="e.g. founder@domain.com or ZOTH-PRO-XXXX">
-        <button class="btn btn-cyan" type="button" style="width:100%; margin-top:10px;" onclick="activateLicenseKey()">
-          🔓 Verify &amp; Unlock Pro Studio
-        </button>
-      </div>
-    </div>
-  </div>
-
   <footer>
-    <div>Engineered by Neal Frazier Tech (<a href="https://github.com/1nc0gn30/zoth-ascii-magic" target="_blank" rel="noopener">@1nc0gn30</a>) • <a href="https://nullai.tech" target="_blank" rel="noopener">NullAI Platform</a> &amp; <a href="https://zoth.nullai.tech" target="_blank" rel="noopener">Zoth Studio</a></div>
+    <div>Engineered by Neal Frazier Tech (<a href="https://github.com/1nc0gn30/zoth-ascii-magic" target="_blank" rel="noopener">@1nc0gn30</a>) • <a href="https://nullai.tech" target="_blank" rel="noopener">NullAI Platform</a> & <a href="https://zoth.nullai.tech" target="_blank" rel="noopener">Zoth Studio</a></div>
   </footer>
 
   <script>
@@ -1124,7 +1080,7 @@
       light: { x: -0.35, y: -0.35 },
       uploadedGrid: null,
       uploadedName: '',
-      licensed: false,
+      licensed: true,
       lastAscii: '',
       lastAnsi: ''
     };
@@ -1433,56 +1389,15 @@
     let fpsHistory = [];
 
     function checkLicenseOnLoad() {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('licensed') === 'true' || localStorage.getItem('zoth_ascii_magic_pro') === 'true') {
-        unlockPro();
-      }
+      // 100% Free & Open Access
+      const badge = document.getElementById('licenseBadge');
+      if (badge) badge.textContent = '✦ OPEN ACCESS';
+      const statusText = document.getElementById('paywallStatusText');
+      if (statusText) statusText.textContent = '✦ 100% UNLOCKED · OPEN ACCESS';
     }
 
     function unlockPro() {
       state.licensed = true;
-      localStorage.setItem('zoth_ascii_magic_pro', 'true');
-      document.getElementById('asciiOutputPre').classList.add('unlocked');
-      document.getElementById('paywallOverlay').classList.add('hidden');
-      document.getElementById('licenseBadge').textContent = '⭐ PRO ACTIVE';
-      document.getElementById('paywallStatusText').textContent = '⭐ PRO UNLOCKED';
-      closeLicenseModal();
-      playClickSound(1200, 'triangle', 0.12);
-    }
-
-    function openLicenseModal() {
-      playClickSound(520, 'sine', 0.05);
-      document.getElementById('licenseModal').classList.add('open');
-    }
-
-    function closeLicenseModal() {
-      document.getElementById('licenseModal').classList.remove('open');
-    }
-
-    function activateLicenseKey() {
-      const val = (document.getElementById('licenseKeyInput').value || '').trim();
-      if (val.length >= 4 && (val.includes('@') || val.toUpperCase().startsWith('ZOTH') || val.length >= 6)) {
-        unlockPro();
-      } else {
-        alert('Please enter your Stripe receipt email or ZOTH-PRO license key.');
-      }
-    }
-
-    function triggerSolanaCheckout() {
-      playClickSound(750, 'triangle', 0.06);
-      if (window.DePayWidgets) {
-        window.DePayWidgets.Payment({
-          integration: '428790dd-7ad1-407c-8ecf-c048c77a4cb8',
-          accept: [{
-            blockchain: 'solana',
-            amount: 19,
-            token: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-            receiver: 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK'
-          }]
-        });
-      } else {
-        window.open('https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L', '_blank');
-      }
     }
 
     function generateSvgVector() {
@@ -1493,7 +1408,7 @@
       const svgH = Math.round(lines.length * lineHeight + 36);
       const rgb = TUBE_PALETTES[state.tubeColor] || [212, 175, 55];
       const hexColor = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-      const escape = (str) => str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const escape = (str) => str.replace(/&/g, '&').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       const textEls = lines
         .map((l, i) => `    <text x="16" y="${(i + 1) * lineHeight + 18}" fill="${hexColor}">${escape(l)}</text>`)
         .join('\n');
@@ -1512,10 +1427,6 @@ ${textEls}
     }
 
     function interceptExport(kind) {
-      if (!state.licensed) {
-        openLicenseModal();
-        return;
-      }
       playClickSound(880, 'sine', 0.08);
       if (kind === 'copy') {
         navigator.clipboard.writeText(state.lastAscii);
