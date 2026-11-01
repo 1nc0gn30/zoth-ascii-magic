@@ -20,7 +20,7 @@
 
 ## 🏛️ Architectural Overview
 
-**Zoth ASCII Magic Studio** is an official sovereign tool in the **[Zoth Studio v2](https://zoth.nullai.tech)** (71-Tool Arsenal) and **[ZothOS Linux 3.3](https://zothos.nullai.tech)** ecosystem, engineered by **Neal Frazier Tech ([@1nc0gn30](https://github.com/1nc0gn30))**.
+**Zoth ASCII Magic Studio** is an official sovereign tool in the **[Zoth Studio v2](https://zoth.nullai.tech)** (72-Tool Arsenal) and **[ZothOS Linux 3.3](https://zothos.nullai.tech)** ecosystem, engineered by **1nc0gn30 • NullAI ([@1nc0gn30](https://github.com/1nc0gn30))**.
 
 | Property | Specification |
 | :--- | :--- |
@@ -65,7 +65,7 @@ python3 ~/NullAITech/zoth-ascii-magic/server.py --port 8132
 
 ---
 
-## ☕ Support Neal Frazier Tech (Zero Paywalls)
+## ☕ Support 1nc0gn30 • NullAI (Zero Paywalls)
 
 All tools in the Zoth Arsenal are **100% free, open, and unlocked by default**. If you enjoy this tool and want to support continued sovereign development:
 
@@ -75,5 +75,5 @@ All tools in the Zoth Arsenal are **100% free, open, and unlocked by default**. 
 ---
 
 <div align="center">
-  <sub>Engineered by <b>Neal Frazier Tech</b> (<a href="https://github.com/1nc0gn30">@1nc0gn30</a>) &bull; <a href="https://nullai.tech">NullAI Platform</a> &bull; <a href="https://zoth.nullai.tech">Zoth Studio v2</a></sub>
+  <sub>Engineered by <b>1nc0gn30 • NullAI</b> (<a href="https://github.com/1nc0gn30">@1nc0gn30</a>) &bull; <a href="https://nullai.tech">NullAI Platform</a> &bull; <a href="https://zoth.nullai.tech">Zoth Studio v2</a></sub>
 </div>

@@ -6,7 +6,7 @@
   <title>Zoth ASCII Magic Studio | Avant-Garde Image, 3D & Sobel Edge ASCII/Braille Synthesizer</title>
   <meta name="description" content="Avant-garde 100% client-side Image & 3D-to-ASCII synthesizer. Features Bayer 4x4/8x8 ordered dithering, sub-pixel Unicode Braille, Sobel directional edge detection, interactive 2D relighting, liquid metal chrome SDF, and 24-bit TrueColor ANSI/SVG exports.">
   <meta name="keywords" content="ascii magic, image to ascii, bayer dithering, braille art generator, ansi art generator, sobel edge ascii, liquid metal shader, paper shaders, zoth studio, nullai, uncommon web">
-  <meta name="author" content="Neal Frazier Tech">
+  <meta name="author" content="1nc0gn30 • NullAI">
 
   <!-- OpenGraph -->
   <meta property="og:title" content="Zoth ASCII Magic Studio | Avant-Garde Image & 3D ASCII/Braille Synthesizer">
@@ -46,8 +46,8 @@
         },
         "creator": {
           "@type": "Person",
-          "name": "Neal Frazier",
-          "url": "https://nealfrazier.tech"
+          "name": "1nc0gn30",
+          "url": "https://nullai.tech"
         }
       },
       {
@@ -638,95 +638,6 @@
       color: var(--text-dim);
     }
 
-    /* Output Paywall Section */
-    .paywall-section {
-      margin-top: 28px;
-      position: relative;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: #05060A;
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-    }
-
-    .paywall-blur-target {
-      padding: 24px;
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      line-height: 1.25;
-      color: var(--gold-soft);
-      max-height: 280px;
-      overflow: hidden;
-      filter: none;
-      user-select: none;
-      transition: filter 0.3s ease;
-      white-space: pre;
-    }
-
-    .paywall-blur-target.unlocked {
-      filter: none;
-      user-select: text;
-      overflow: auto;
-    }
-
-    .paywall-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(5, 6, 10, 0.78);
-      backdrop-filter: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
-      gap: 12px;
-    }
-
-    .paywall-overlay.hidden {
-      display: none;
-    }
-
-    /* Modal Backdrop */
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: none;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 16px;
-    }
-
-    .modal-backdrop.open {
-      display: flex;
-    }
-
-    .modal-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--gold);
-      border-radius: 18px;
-      max-width: 560px;
-      width: 100%;
-      padding: 28px;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.9);
-    }
-
-    .key-input {
-      width: 100%;
-      min-height: 44px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #040508;
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      margin-top: 8px;
-    }
-
     /* Footer */
     footer {
       margin-top: 48px;
@@ -747,39 +658,61 @@
     footer a:hover {
       text-decoration: underline;
     }
-  </style>
 
-  <!-- Zoth 100% Open-Access & Buy Us a Coffee Invariant -->
-  <script id="zoth-open-access-init">
-    (function() {
-      try {
-        var keys = ['agent_audiocipher_pro', 'agent_cyber_turtle_pro', 'agent_datamosh_pro', 'agent_nexus3d_pro', 'agent_policy_pro', 'audiocipher_license', 'audiocipher_pro_licensed', 'badge3d_pro_licensed', 'certpath_pro_key', 'certpath_pro_licensed', 'cron_rhythm_pro_key', 'cron_rhythm_pro_licensed', 'cwv-speed-engine_pro_licensed', 'cwv_pro_licensed', 'cyber_turtle_pro_licensed', 'datamosh_pro_licensed', 'deepsearch-research-agent_pro_licensed', 'deepsearch_pro_licensed', 'entropy_studio_licensed', 'envguard-secrets-vault_pro_licensed', 'envguard_pro_license', 'etsy_connector_pro', 'jwt_guard_licensed', 'mdg_pro_licensed', 'neuro_pro_licensed', 'nexus3d_pro_licensed', 'omnipost_pro_key', 'omnipost_pro_licensed', 'osint_pro_licensed', 'payload-entropy-studio_pro_licensed', 'polyglot_pro_licensed', 'pro_licensed', 'promptmaster_pro_licensed', 'promptmaster_pro_active', 'robots-txt-auditor_pro_licensed', 'robots_pro_licensed', 'schema_illustrator_pro_licensed', 'sovereign_pro_licensed', 'subsweep-lead-scanner_pro_licensed', 'subsweep_licensed', 'turtle_pro_licensed', 'ufo_sacred_licensed', 'vector-search-engine_pro_licensed', 'vector_studio_pro_licensed', 'web-security-guard_pro_licensed', 'web_security_guard_licensed', 'yourdigitalspace_pro', 'zela_guide_pro_licensed', 'zoth_ascii_magic_pro', 'zoth_audiocipher_licensed', 'zoth_badge3d_licensed', 'zoth_cyber_turtle_licensed', 'zoth_datamosh_licensed', 'zoth_etsy_licensed', 'zoth_nexus3d_licensed', 'zoth_osint_licensed', 'zoth_policy_licensed', 'zoth_sacred_licensed', 'zoth_ufo_licensed'];
-        for (var i = 0; i < keys.length; i++) {
-          localStorage.setItem(keys[i], 'true');
-        }
-        localStorage.setItem('pm_license_v2', JSON.stringify({ method: 'open_access', ref: 'free_forever', at: '2026-01-01T00:00:00Z' }));
-        window.isPro = true;
-        window.isProLicensed = true;
-      } catch (e) {}
-    })();
+    html[data-theme="light"] {
+      --bg: #F8F6F0;
+      --bg-surface: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-card-alt: #F1EDE2;
+      --border: rgba(154, 107, 22, 0.28);
+      --border-glow: rgba(154, 107, 22, 0.45);
+      --border-subtle: rgba(17, 24, 39, 0.12);
+      --text: #111827;
+      --text-muted: #374151;
+      --text-dim: #4B5563;
+      --gold: #9A6B16;
+      --gold-soft: #78500D;
+      --cyan: #0369A1;
+      --cyan-soft: #0284C7;
+      --emerald: #047857;
+    }
+    html[data-theme="light"] body {
+      background-color: #F8F6F0 !important;
+      color: #111827 !important;
+    }
+    html[data-theme="light"] header,
+    html[data-theme="light"] footer,
+    html[data-theme="light"] .conic-beam-inner,
+    html[data-theme="light"] .viewport-panel,
+    html[data-theme="light"] .sidebar-panel {
+      background: #FFFFFF !important;
+      color: #111827 !important;
+      border-color: rgba(17, 24, 39, 0.12) !important;
+    }
+    html[data-theme="light"] .pill-btn {
+      background: #F3F0E6 !important;
+      color: #1F2937 !important;
+      border-color: rgba(17, 24, 39, 0.15) !important;
+    }
+    html[data-theme="light"] .pill-btn.active {
+      background: rgba(154, 107, 22, 0.14) !important;
+      color: #78500D !important;
+      border-color: #9A6B16 !important;
+    }
+    @media (max-width: 640px) {
+      header, main { padding-left: 12px !important; padding-right: 12px !important; }
+      .bento-grid, .ramp-grid, .telemetry-grid { grid-template-columns: minmax(0, 1fr) !important; }
+    }
+  </style>
+  <script>
+    function toggleLightDarkTheme() {
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      const btn = document.getElementById('themeToggleBtn');
+      if (btn) btn.textContent = next === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode';
+    }
   </script>
-  <style id="zoth-open-access-override">
-    .paywall-overlay, .output-paywall-overlay, #outputPaywallOverlay, #schemaPaywallOverlay,
-    #transformerPaywallOverlay, #proPaywallModal, #licenseModal, #salesBanner, #founding-offer-banner,
-    #funnelHeroBanner, [data-alias="paywallOverlay"], [data-alias="founding-offer-banner"] {
-      display: none !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-    .paywall-wrap #outputPreview, .paywall-wrap #reportContentArea, .paywall-content,
-    .paywall-content.locked, .paywall-wrap.is-locked #outputPreview, .paywall-wrap.locked #outputPreview {
-      filter: none !important;
-      -webkit-filter: none !important;
-      user-select: auto !important;
-      pointer-events: auto !important;
-    }
-  </style>
-
 </head>
 <body>
 
@@ -809,6 +742,9 @@
       </div>
     </div>
     <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+      <button id="themeToggleBtn" type="button" class="pill-btn" onclick="toggleLightDarkTheme()">
+        ☀️ Light Mode
+      </button>
       <span id="soundBadge" class="tag-chip" style="cursor:pointer;" onclick="toggleAudio()" title="Toggle WebAudio Sound Effects">
         🔊 AUDIO: ON
       </span>
@@ -1006,7 +942,7 @@
   </main>
 
   <footer>
-    <div>Engineered by Neal Frazier Tech (<a href="https://github.com/1nc0gn30/zoth-ascii-magic" target="_blank" rel="noopener">@1nc0gn30</a>) • <a href="https://nullai.tech" target="_blank" rel="noopener">NullAI Platform</a> & <a href="https://zoth.nullai.tech" target="_blank" rel="noopener">Zoth Studio</a></div>
+    <div>Engineered by 1nc0gn30 • NullAI (<a href="https://github.com/1nc0gn30/zoth-ascii-magic" target="_blank" rel="noopener">@1nc0gn30</a>) • <a href="https://nullai.tech" target="_blank" rel="noopener">NullAI Platform</a> & <a href="https://zoth.nullai.tech" target="_blank" rel="noopener">Zoth Studio</a></div>
   </footer>
 
   <script>
@@ -1826,5 +1762,6 @@ ${textEls}
     checkLicenseOnLoad();
     requestAnimationFrame(renderLoop);
   </script>
+  <script src="/assets/sovereign-upgrade.js" defer></script>
 </body>
 </html>

@@ -2,12 +2,13 @@
 """
 Zoth ASCII Magic Server (Port :8132)
 Avant-Garde Image & 3D to TrueColor ASCII, Bayer Dither & SVG Server
-Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+Engineered by 1nc0gn30 (@1nc0gn30) • NullAI Platform
 """
 
 import argparse
 import http.server
 from importlib.machinery import SourceFileLoader
+import importlib.util
 import json
 import os
 import socketserver
@@ -19,7 +20,9 @@ PUBLIC_DIR = os.path.join(SCRIPT_DIR, "public")
 CLI_PATH = os.path.join(SCRIPT_DIR, "bin", "zoth-ascii-magic")
 
 # Dynamically import CLI module
-ascii_cli = SourceFileLoader("zoth_ascii_cli", CLI_PATH).load_module()
+_spec = importlib.util.spec_from_loader("zoth_ascii_cli", SourceFileLoader("zoth_ascii_cli", CLI_PATH))
+ascii_cli = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(ascii_cli)
 
 
 class ZothAsciiMagicHandler(http.server.SimpleHTTPRequestHandler):

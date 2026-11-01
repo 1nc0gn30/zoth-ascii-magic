@@ -2,7 +2,7 @@
 """
 Zoth ASCII Magic CLI (zoth-ascii-magic v2.7.0)
 Avant-Garde Image & 3D SDF to 24-Bit TrueColor ASCII, Bayer Dither, Unicode Braille & SVG Vector Synthesizer.
-Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+Engineered by 1nc0gn30 (@1nc0gn30) • NullAI Platform
 """
 import argparse
 import http.server
