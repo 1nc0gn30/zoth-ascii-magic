@@ -1344,7 +1344,7 @@
       const svgH = Math.round(lines.length * lineHeight + 36);
       const rgb = TUBE_PALETTES[state.tubeColor] || [212, 175, 55];
       const hexColor = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-      const escape = (str) => str.replace(/&/g, '&').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      const escape = (str) => str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
       const textEls = lines
         .map((l, i) => `    <text x="16" y="${(i + 1) * lineHeight + 18}" fill="${hexColor}">${escape(l)}</text>`)
         .join('\n');
