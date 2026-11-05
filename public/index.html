@@ -1762,6 +1762,22 @@ ${textEls}
     checkLicenseOnLoad();
     requestAnimationFrame(renderLoop);
   </script>
-  <script src="/assets/sovereign-upgrade.js" defer></script>
+  
+
+  <script src="/sovereign_tutorial.js"></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", function() {
+      if (window.createSovereignTutorial) {
+        window.createSovereignTutorial({
+          toolId: "zoth-ascii-magic",
+          toolName: "Zoth ASCII Magic Studio",
+          tagline: "Avant-garde Image and 3D-to-ASCII synthesizer with sub-pixel Braille and Bayer dither!",
+          accentColor: "#EAB308",
+          steps: [{"icon": "\ud83c\udfa8", "title": "Turn Photos into ASCII Art", "desc": "Drop any picture or 3D model to transform it into stunning retro terminal text and Braille patterns."}, {"icon": "\u25a6", "title": "Bayer Dithering & Sobel Edges", "desc": "Uses ordered Bayer 8x8 matrices and Sobel edge detection to create crisp, high-contrast monochrome art."}, {"icon": "\ud83d\udca1", "title": "Interactive 2D Point Relighting", "desc": "Move your mouse across the canvas to shine a virtual light source that recalculates character shading live!"}]
+        });
+      }
+    });
+  </script>
+
 </body>
 </html>
