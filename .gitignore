@@ -1,11 +1,13 @@
-# Local Netlify folder
-.netlify
-
+# Local build, cache, and deployment artifacts
+.netlify/
+.pytest_cache/
 .venv/
 .venv*/
 venv/
 node_modules/
 __pycache__/
+*.pyc
+*.pyo
 *.pth
 *.onnx
 data/minds/spool.jsonl

@@ -243,19 +243,19 @@ def render_matrix(cols: int, mode: str, preset: str, image_path: str | None, edg
 
 
 def serve_web(port: int):
-    web_dir = "~/NullAITech/zoth-ascii-magic/public"
-    if not os.path.isdir(web_dir):
-        web_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "public")
+    web_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "public")
     os.chdir(web_dir)
     handler = http.server.SimpleHTTPRequestHandler
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("127.0.0.1", port), handler) as httpd:
-        print(f"⚡ Zoth ASCII Magic Studio serving on http://127.0.0.1:{port} (Zero-Egress Loopback)")
+        print(f"Zoth ASCII Magic Studio serving on http://127.0.0.1:{port} (Zero-Egress Loopback)")
         httpd.serve_forever()
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Zoth ASCII Magic CLI (v2.7.0) — Avant-Garde Image & 3D to TrueColor ASCII, Bayer Dither & SVG")
+    parser = argparse.ArgumentParser(description="Zoth ASCII Magic CLI (v2.7.0) — Image & 3D to TrueColor ASCII, Bayer Dither & SVG")
+    parser.add_argument("--version", action="version", version="zoth-ascii-magic 2.7.0")
+    parser.add_argument("--status", action="store_true", help="Print status manifest JSON and exit")
     parser.add_argument("-i", "--image", help="Path to input image (PNG/JPG/WebP)")
     parser.add_argument("-p", "--preset", default="cyberBust", choices=["cyberBust", "liquidChrome", "torus4d", "merkaba", "datamosh", "radar", "sigil"], help="Procedural 3D SDF shader preset")
     parser.add_argument("-m", "--mode", default="ascii", choices=["ascii", "braille", "bayer4", "bayer8", "blocks", "katakana", "newsprint", "hex"], help="Glyph quantizer ramp")
@@ -268,6 +268,25 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output JSON descriptor payload")
     parser.add_argument("--serve", type=int, metavar="PORT", help="Launch local Zoth ASCII Magic Web Studio on 127.0.0.1:PORT")
     args = parser.parse_args()
+
+    if args.status:
+        print(
+            json.dumps(
+                {
+                    "tool": "zoth-ascii-magic",
+                    "version": "2.7.0",
+                    "status": "ready",
+                    "port": 8132,
+                    "local_url": "http://127.0.0.1:8132",
+                    "studio_url": "https://zoth.nullai.tech/tools/zoth-ascii-magic",
+                    "quantizers": list(RAMPS.keys()),
+                    "palettes": list(PALETTES.keys()),
+                    "presets": ["cyberBust", "liquidChrome", "torus4d", "merkaba", "datamosh", "radar", "sigil"],
+                },
+                indent=2,
+            )
+        )
+        return
 
     if args.serve:
         serve_web(args.serve)

@@ -156,12 +156,36 @@ class ThreadingTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 def main():
     parser = argparse.ArgumentParser(description="Zoth ASCII Magic Web Daemon")
+    parser.add_argument("--version", action="version", version="zoth-ascii-magic 2.7.0")
+    parser.add_argument("--host", default="127.0.0.1", help="Host interface (default: 127.0.0.1)")
     parser.add_argument("--port", type=int, default=8132, help="Port to bind (default: 8132)")
+    parser.add_argument("--status", action="store_true", help="Print status manifest JSON and exit")
+    parser.add_argument("--json", action="store_true", help="Emit JSON status payload and exit")
     args = parser.parse_args()
 
-    server = ThreadingTCPServer(("127.0.0.1", args.port), ZothAsciiMagicHandler)
+    if args.status or args.json:
+        print(
+            json.dumps(
+                {
+                    "tool": "zoth-ascii-magic",
+                    "version": "2.7.0",
+                    "status": "ready",
+                    "host": args.host,
+                    "port": args.port,
+                    "local_url": f"http://{args.host}:{args.port}",
+                    "studio_url": "https://zoth.nullai.tech/tools/zoth-ascii-magic",
+                    "quantizers": list(ascii_cli.RAMPS.keys()),
+                    "palettes": list(ascii_cli.PALETTES.keys()),
+                    "presets": ["cyberBust", "liquidChrome", "torus4d", "merkaba", "datamosh", "radar", "sigil"],
+                },
+                indent=2,
+            )
+        )
+        return
+
+    server = ThreadingTCPServer((args.host, args.port), ZothAsciiMagicHandler)
     server.port = args.port
-    print(f"⚡ Zoth ASCII Magic server running on http://127.0.0.1:{args.port} (serving {PUBLIC_DIR})")
+    print(f"Zoth ASCII Magic server running on http://{args.host}:{args.port} (serving {PUBLIC_DIR})")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
