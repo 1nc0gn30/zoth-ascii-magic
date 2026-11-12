@@ -785,16 +785,22 @@
             <button class="pill-btn" type="button" onclick="togglePlay()" id="playBtn">
               ⏸ Pause
             </button>
+            <button class="pill-btn" type="button" id="webcamBtn" onclick="toggleWebcam()">
+              📷 Live WebCam
+            </button>
             <button class="pill-btn" type="button" id="recordBtn" onclick="recordVideoClip(5.0)" style="color:#F43F5E; border-color:rgba(244,63,94,0.4);">
               ⏺ Record WebM (5s)
             </button>
-            <button class="pill-btn" type="button" onclick="interceptExport('copy')">
+            <button class="pill-btn" type="button" onclick="exportArtifact('copy')">
               📋 Copy ASCII
             </button>
-            <button class="pill-btn" type="button" onclick="interceptExport('svg-dl')">
+            <button class="pill-btn" type="button" onclick="exportArtifact('svg-dl')">
               ⬇ Download SVG
             </button>
-            <button class="pill-btn" type="button" onclick="interceptExport('png')">
+            <button class="pill-btn" type="button" onclick="exportArtifact('ansi-sh')">
+              💻 Export ANSI (.sh)
+            </button>
+            <button class="pill-btn" type="button" onclick="exportArtifact('png')">
               🖼 Save PNG
             </button>
           </div>
@@ -1350,7 +1356,52 @@ ${textEls}
 </svg>`;
     }
 
-    function interceptExport(kind) {
+    let webcamStream = null;
+    let webcamVideo = null;
+    let offscreenCamCanvas = null;
+
+    async function toggleWebcam() {
+      playClickSound(750, 'triangle', 0.08);
+      const btn = document.getElementById('webcamBtn');
+      if (webcamStream) {
+        webcamStream.getTracks().forEach(t => t.stop());
+        webcamStream = null;
+        state.uploadedGrid = null;
+        state.uploadedName = '';
+        if (btn) {
+          btn.textContent = '📷 Live WebCam';
+          btn.style.color = '';
+          btn.style.borderColor = '';
+        }
+        return;
+      }
+      try {
+        webcamStream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } });
+        if (!webcamVideo) {
+          webcamVideo = document.createElement('video');
+          webcamVideo.autoplay = true;
+          webcamVideo.muted = true;
+          webcamVideo.playsInline = true;
+        }
+        webcamVideo.srcObject = webcamStream;
+        await webcamVideo.play();
+        state.uploadedName = 'LIVE WEBCAM';
+        if (!offscreenCamCanvas) {
+          offscreenCamCanvas = document.createElement('canvas');
+          offscreenCamCanvas.width = 128;
+          offscreenCamCanvas.height = 72;
+        }
+        if (btn) {
+          btn.textContent = '⏹ Stop WebCam';
+          btn.style.color = '#10B981';
+          btn.style.borderColor = '#10B981';
+        }
+      } catch (err) {
+        alert('WebCam access denied or unavailable: ' + err.message);
+      }
+    }
+
+    function exportArtifact(kind) {
       playClickSound(880, 'sine', 0.08);
       if (kind === 'copy') {
         navigator.clipboard.writeText(state.lastAscii);
@@ -1365,6 +1416,13 @@ ${textEls}
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = `zoth-ascii-magic-${state.preset}-${state.cols}cols.svg`;
+        a.click();
+      } else if (kind === 'ansi-sh') {
+        const script = `#!/usr/bin/env bash\n# ==============================================================================\n# Zoth ASCII Magic Studio — TrueColor ANSI Export\n# Engineered by 1nc0gn30 (@1nc0gn30) • NullAI Platform\n# Run: bash this_file.sh\n# ==============================================================================\ncat << 'EOF'\n${state.lastAnsi}\nEOF\n`;
+        const blob = new Blob([script], { type: 'application/x-sh;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `zoth_ascii_art_${state.preset}.sh`;
         a.click();
       } else if (kind === 'ansi') {
         const blob = new Blob([state.lastAnsi], { type: 'text/plain;charset=utf-8' });
@@ -1383,6 +1441,7 @@ ${textEls}
         a.click();
       }
     }
+    const interceptExport = exportArtifact;
 
     function selectPreset(id, btn) {
       playClickSound(580, 'sine', 0.04);
@@ -1600,6 +1659,13 @@ ${textEls}
       ctx.font = `600 ${fontSize}px "JetBrains Mono", monospace`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
+
+      if (webcamStream && webcamVideo && webcamVideo.readyState >= 2 && offscreenCamCanvas) {
+        const octx = offscreenCamCanvas.getContext('2d');
+        octx.drawImage(webcamVideo, 0, 0, 128, 72);
+        const imgData = octx.getImageData(0, 0, 128, 72).data;
+        state.uploadedGrid = { width: 128, height: 72, data: imgData };
+      }
 
       const lumGrid = new Float32Array(rows * cols);
       const rgbGrid = new Uint8Array(rows * cols * 3);

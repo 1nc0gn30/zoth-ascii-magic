@@ -17,6 +17,8 @@ Zoth ASCII Magic Studio converts images, webcam/video feeds, and procedural 3D s
 
 Core capabilities:
 - **8 Deterministic Glyph Quantizers**: `ascii`, `braille` (Unicode `U+2800` sub-pixel density), `bayer4` (4x4 ordered Bayer threshold matrix), `bayer8` (8x8 ordered Bayer threshold matrix), `blocks`, `katakana`, `newsprint`, and `hex`.
+- **Live WebCam & Video Rasterization**: 60fps in-browser webcam stream quantizer rendering directly into ASCII, Braille, or Bayer matrices with zero cloud latency.
+- **TrueColor ANSI Script Exporter**: Exports executable `.sh` shell scripts (`cat << 'EOF'`) containing ANSI 24-bit TrueColor sequences for immediate terminal playback.
 - **Sobel Directional Edge Contours**: Computes horizontal ($G_x$) and vertical ($G_y$) Sobel luminance gradients per cell and maps high-gradient structural edges (`> 0.34`) to `/`, `\`, `|`, and `-` contours.
 - **7 Procedural 3D SDF Presets & 6 CRT Tube Palettes**: Ships `cyberBust`, `liquidChrome`, `torus4d`, `merkaba`, `datamosh`, `radar`, and `sigil` across `gold`, `amber`, `emerald`, `cyan`, `crimson`, and `neon` phosphor palettes, plus interactive 2D point relighting in the browser workstation.
 
