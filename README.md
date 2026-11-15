@@ -99,8 +99,10 @@ python3 server.py --status --json
 
 ## Support
 
-Zoth ASCII Magic Studio is 100% free and open-source with zero paywalls or locked exports. Optional support: [Buy Us a Coffee (Stripe)](https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X).
+Zoth ASCII Magic Studio is 100% free and open-source with zero paywalls or locked exports:
+- **☕ Buy Us a Coffee (Stripe)**: [https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X](https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X)
+- **◎ Solana Tip Address**: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`
 
 ## License
 
-Released under the [MIT License](LICENSE). Copyright (c) 2026 [1nc0gn30](https://1nc0gn30.si) & [NullAI](https://nullai.tech).
+Engineered by **Neal Frazier Tech (@1nc0gn30) • NullAI Platform** ([GitHub](https://github.com/1nc0gn30/zoth-ascii-magic) · [https://nullai.tech](https://nullai.tech)). Released under the [MIT License](LICENSE).
